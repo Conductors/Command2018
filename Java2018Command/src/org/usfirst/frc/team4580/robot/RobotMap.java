@@ -7,7 +7,6 @@
 
 package org.usfirst.frc.team4580.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -32,4 +31,5 @@ public class RobotMap {
 	public static int stick1 = 0;
 	public static int stick2 = 1;
 	public static int joyY = 0;
+	public static double rotateVelocity = .5;
 }

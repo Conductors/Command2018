@@ -2,7 +2,6 @@ package org.usfirst.frc.team4580.robot.commands;
 
 import org.usfirst.frc.team4580.robot.OI;
 import org.usfirst.frc.team4580.robot.Robot;
-import org.usfirst.frc.team4580.robot.subsystems.DriveBase;
 
 import edu.wpi.first.wpilibj.command.Command;
 

@@ -7,13 +7,17 @@
 
 package org.usfirst.frc.team4580.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4580.robot.commands.ExampleCommand;
-import org.usfirst.frc.team4580.robot.commands.TankDriveTele;
+import org.usfirst.frc.team4580.robot.commands.LeftSwitch;
+import org.usfirst.frc.team4580.robot.commands.RightSwitch;
+import org.usfirst.frc.team4580.robot.commands.TeleCommands;
 import org.usfirst.frc.team4580.robot.subsystems.DriveBase;
 import org.usfirst.frc.team4580.robot.subsystems.ExampleSubsystem;
 
@@ -31,7 +35,9 @@ public class Robot extends TimedRobot {
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public static DriveBase driveBase;
-	public static TankDriveTele tankDriveTele;
+	public static TeleCommands teleCommands;
+	public static LeftSwitch leftSwitch;
+	public static RightSwitch rightSwitch;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -44,7 +50,11 @@ public class Robot extends TimedRobot {
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		driveBase = new DriveBase();
-		tankDriveTele = new TankDriveTele();
+		teleCommands = new TeleCommands();
+		leftSwitch =  new LeftSwitch();
+		rightSwitch = new RightSwitch();
+		m_chooser.addObject("Left Switch", leftSwitch);
+		m_chooser.addObject("Right Switch", rightSwitch);
 	}
 
 	/**
@@ -75,18 +85,25 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = m_chooser.getSelected();
+		/* m_autonomousCommand = m_chooser.getSelected();
 
-		/*
+		*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
 		 * = new MyAutoCommand(); break; case "Default Auto": default:
 		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
+		 *
 
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.start();
+		} */
+		String gameData;
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		if (gameData.charAt(0) == 'L') {
+			leftSwitch.start();
+		} else {
+			rightSwitch.start();
 		}
 	}
 
@@ -107,7 +124,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
-		tankDriveTele.start();
+		teleCommands.start();
 		
 	}
 
