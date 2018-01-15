@@ -7,19 +7,20 @@
 
 package org.usfirst.frc.team4580.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team4580.robot.commands.ExampleCommand;
+
+import org.usfirst.frc.team4580.robot.commands.Baseline;
 import org.usfirst.frc.team4580.robot.commands.LeftSwitch;
 import org.usfirst.frc.team4580.robot.commands.RightSwitch;
 import org.usfirst.frc.team4580.robot.commands.TeleCommands;
 import org.usfirst.frc.team4580.robot.subsystems.DriveBase;
-import org.usfirst.frc.team4580.robot.subsystems.ExampleSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,8 +30,6 @@ import org.usfirst.frc.team4580.robot.subsystems.ExampleSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static final ExampleSubsystem kExampleSubsystem
-			= new ExampleSubsystem();
 	public static OI m_oi;
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -38,6 +37,7 @@ public class Robot extends TimedRobot {
 	public static TeleCommands teleCommands;
 	public static LeftSwitch leftSwitch;
 	public static RightSwitch rightSwitch;
+	public static Baseline baseline;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -46,15 +46,23 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		m_oi = new OI();
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
+		m_chooser.addDefault("Default Auto", new LeftSwitch());
+		m_chooser.addObject("Left Switch", leftSwitch);
+		m_chooser.addObject("Right Switch", rightSwitch);
+		m_chooser.addObject("Baseline", baseline);
 		SmartDashboard.putData("Auto mode", m_chooser);
+		baseline = new Baseline();
 		driveBase = new DriveBase();
 		teleCommands = new TeleCommands();
 		leftSwitch =  new LeftSwitch();
 		rightSwitch = new RightSwitch();
-		m_chooser.addObject("Left Switch", leftSwitch);
-		m_chooser.addObject("Right Switch", rightSwitch);
+		/*try {
+			CameraServer.getInstance().startAutomaticCapture();
+		} catch (Exception e) {
+			DriverStation.reportError("CAMERA SERVER ERROR: " + e.getMessage(), true);
+		} */
+		Compressor compressor = new Compressor(0);
+		compressor.setClosedLoopControl(true);
 	}
 
 	/**
@@ -101,10 +109,13 @@ public class Robot extends TimedRobot {
 		String gameData;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		if (gameData.charAt(0) == 'L') {
-			leftSwitch.start();
+			m_autonomousCommand = leftSwitch;
 		} else {
-			rightSwitch.start();
+			m_autonomousCommand = rightSwitch;
 		}
+		m_autonomousCommand = leftSwitch;
+		SmartDashboard.putString("Current Command", "Baseline");
+		m_autonomousCommand.start();
 	}
 
 	/**

@@ -44,9 +44,12 @@ public class OI {
 	public static Joystick stickOne = new Joystick(RobotMap.stick1);
 	public static Joystick stickTwo = new Joystick(RobotMap.stick2);
 	public static double getLeftSpeed() {
-		return stickOne.getRawAxis(RobotMap.joyY);
+		return stickOne.getRawAxis(1);
 	}
 	public static double getRightSpeed() {
-		return stickTwo.getRawAxis(RobotMap.joyY);
+		return stickOne.getRawAxis(5);
+	}
+	public static boolean getButton(int n) {
+		return stickOne.getRawButton(n);
 	}
 }
