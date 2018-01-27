@@ -18,11 +18,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class TankDriveTele extends Command {
     DoubleSolenoid shift;
-    NetworkTable vision;	
+    //NetworkTable vision;	
 	public TankDriveTele() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveBase);
-        vision =  NetworkTableInstance.create().getTable("GRIP/vision");
+        //vision =  NetworkTableInstance.create().getTable("GRIP/vision");
         
     }
     // Called just before this Command runs the first time
@@ -39,9 +39,9 @@ public class TankDriveTele extends Command {
     	if (OI.getButton(5)) shift.set(DoubleSolenoid.Value.kForward);
     	if (OI.getButton(6)) shift.set(DoubleSolenoid.Value.kReverse);
     	//System.out.println(Robot.driveBase.getAngle());
-    	double[] defaultValue = new double[0];
-    	System.out.println(vision.getEntry("centerX").getDoubleArray(defaultValue)[0]);
-    	SmartDashboard.putNumberArray("CENTERX", vision.getEntry("centerX").getDoubleArray(defaultValue));
+    	//double[] defaultValue = new double[0];
+    	//System.out.println(vision.getEntry("centerX").getDoubleArray(defaultValue)[0]);
+    	//SmartDashboard.putNumberArray("CENTERX", vision.getEntry("centerX").getDoubleArray(defaultValue));
     
     }
 

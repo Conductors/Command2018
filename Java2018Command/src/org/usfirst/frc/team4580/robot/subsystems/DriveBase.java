@@ -29,11 +29,7 @@ public class DriveBase extends Subsystem implements PIDOutput {
     static final double kD = 0.00;
     static final double kF = 0.00;
     static final double kTolerancePercent = .5;
-	static final double lP = 0.03;
-    static final double lI = 0.00;
-    static final double lD = 0.00;
-    static final double lF = 0.00;
-    static final double lTolerancePercent = .5;
+
     double rotateToAngleRate;
     PIDController turnController;
     PIDController distController;
@@ -52,8 +48,7 @@ public class DriveBase extends Subsystem implements PIDOutput {
         //setDefaultCommand(new MySpecialCommand());
     }
 	public DriveBase() {
-    	right = new Encoder(2,3,true,EncodingType.k4X);
-    	left = new Encoder(0, 1,true,EncodingType.k4X);
+
 		leftFront = new WPI_TalonSRX(RobotMap.leftFrontTal);
 		leftBack = new WPI_TalonSRX(RobotMap.leftBackTal);
 		rightFront = new WPI_TalonSRX(RobotMap.rightFrontTal);
@@ -70,13 +65,11 @@ public class DriveBase extends Subsystem implements PIDOutput {
     	turnController.setOutputRange(-1.0, 1.0);
     	turnController.setPercentTolerance(kTolerancePercent);
     	turnController.setContinuous(true);
-    	distController = new PIDController(lP,lI,lD,lF,right,this);
+
     	
     	
 	}
-	public boolean isDone() {
-		return turnController.onTarget();
-	}
+
 	public void tankDrive(double firstVal,double secondVal) {
 		myRobot.tankDrive(firstVal, secondVal);
 	}
