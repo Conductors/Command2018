@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class Rotate90 extends Command {
+public class Rotateneg90 extends Command {
 
-    public Rotate90() {
+    public Rotateneg90() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.driveBase);
@@ -18,7 +18,7 @@ public class Rotate90 extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.driveBase.resetNavx();
-    	Robot.driveBase.PIDRotate(90);
+    	Robot.driveBase.PIDRotate(-90);
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -7,6 +7,9 @@
 
 package org.usfirst.frc.team4580.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -46,16 +49,20 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		m_oi = new OI();
+
+		driveBase = new DriveBase();
+		baseline = new Baseline();
+
+		teleCommands = new TeleCommands();
+		leftSwitch =  new LeftSwitch();
+		rightSwitch = new RightSwitch();
 		m_chooser.addDefault("Default Auto", new LeftSwitch());
 		m_chooser.addObject("Left Switch", leftSwitch);
 		m_chooser.addObject("Right Switch", rightSwitch);
 		m_chooser.addObject("Baseline", baseline);
 		SmartDashboard.putData("Auto mode", m_chooser);
-		baseline = new Baseline();
-		driveBase = new DriveBase();
-		teleCommands = new TeleCommands();
-		leftSwitch =  new LeftSwitch();
-		rightSwitch = new RightSwitch();
+		CameraServer.getInstance().startAutomaticCapture();
+		
 		/*try {
 			CameraServer.getInstance().startAutomaticCapture();
 		} catch (Exception e) {
@@ -77,7 +84,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
+		
 	}
 
 	/**
@@ -106,15 +113,15 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.start();
 		} */
-		String gameData;
+		/*String gameData;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		if (gameData.charAt(0) == 'L') {
 			m_autonomousCommand = leftSwitch;
 		} else {
 			m_autonomousCommand = rightSwitch;
-		}
+		} */
 		m_autonomousCommand = leftSwitch;
-		SmartDashboard.putString("Current Command", "Baseline");
+	
 		m_autonomousCommand.start();
 	}
 

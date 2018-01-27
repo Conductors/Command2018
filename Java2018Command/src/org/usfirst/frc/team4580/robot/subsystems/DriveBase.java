@@ -6,12 +6,15 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 //import edu.wpi.first.wpilibj.PIDController;
 //import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -21,13 +24,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class DriveBase extends Subsystem implements PIDOutput {
-	static final double kP = 0.03;
+	static final double kP = 0.06;
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 0.00;
-    static final double kToleranceDegrees = 2.0f;
+    static final double kTolerancePercent = .5;
+	static final double lP = 0.03;
+    static final double lI = 0.00;
+    static final double lD = 0.00;
+    static final double lF = 0.00;
+    static final double lTolerancePercent = .5;
     double rotateToAngleRate;
     PIDController turnController;
+    PIDController distController;
     WPI_TalonSRX leftFront;
 	WPI_TalonSRX leftBack;
 	WPI_TalonSRX rightFront;
@@ -35,12 +44,16 @@ public class DriveBase extends Subsystem implements PIDOutput {
 	SpeedControllerGroup leftSide;
 	SpeedControllerGroup rightSide;
 	DifferentialDrive myRobot;
+	Encoder right;
+	Encoder left;
 	AHRS navx;
 	public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
 	public DriveBase() {
+    	right = new Encoder(2,3,true,EncodingType.k4X);
+    	left = new Encoder(0, 1,true,EncodingType.k4X);
 		leftFront = new WPI_TalonSRX(RobotMap.leftFrontTal);
 		leftBack = new WPI_TalonSRX(RobotMap.leftBackTal);
 		rightFront = new WPI_TalonSRX(RobotMap.rightFrontTal);
@@ -50,55 +63,48 @@ public class DriveBase extends Subsystem implements PIDOutput {
 		myRobot = new DifferentialDrive(leftSide, rightSide );
 		myRobot.setSafetyEnabled(false);
 		myRobot.setExpiration(.1);
+    	navx = new AHRS(I2C.Port.kMXP);
 		turnController = new PIDController(kP, kI, kD, kF, navx, this);
-    	turnController.setInputRange(-180.0f, 180.0f);
+    	navx.reset();
+		turnController.setInputRange(-500.0f, 500.0f);
     	turnController.setOutputRange(-1.0, 1.0);
-    	turnController.setAbsoluteTolerance(kToleranceDegrees);
+    	turnController.setPercentTolerance(kTolerancePercent);
     	turnController.setContinuous(true);
-    	try {
-    		navx = new AHRS(SerialPort.Port.kMXP);
-    	} catch (RuntimeException ex ) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
+    	distController = new PIDController(lP,lI,lD,lF,right,this);
+    	
+    	
 	}
-
+	public boolean isDone() {
+		return turnController.onTarget();
+	}
 	public void tankDrive(double firstVal,double secondVal) {
 		myRobot.tankDrive(firstVal, secondVal);
 	}
 	public void arcadeDrive(double firstVal, double secondVal) {
 		myRobot.arcadeDrive(firstVal, secondVal);
-	}
-    public void rotate(double angle) {
-    		navx.reset();
-    		while (!(navx.getAngle() + 4 > angle && navx.getAngle() - 4 < angle)) {
-	    		if (angle > navx.getAngle()) {
-	    			tankDrive(RobotMap.rotateVelocity,-1 * RobotMap.rotateVelocity);
-	    			SmartDashboard.putNumber("Angle", navx.getAngle());
-	    		} else {
-	    			tankDrive(-1 * RobotMap.rotateVelocity,RobotMap.rotateVelocity);
-	    			SmartDashboard.putNumber("Angle", navx.getAngle());
-	    		}
-    		}
-    		myRobot.tankDrive(0, 0);
     }
     public void PIDRotate(double angle) {
+    	navx.reset();
     	turnController.setSetpoint(angle);
     	turnController.enable();
-    	LiveWindow.addActuator("DriveSystem", "RotateController", turnController);
-    	
+    	SmartDashboard.putNumber("NavX", navx.getAngle());
+    	SmartDashboard.putData("Left Encoder PID",turnController);
     	
     }
+    public void PIDEnable(boolean enable) {
+    	if (enable) {
+    		turnController.enable();
+    	} else {
+    		turnController.disable();
+    	}
+    }
     public void resetNavx() {
-    	try {
-        	navx = new AHRS(SerialPort.Port.kMXP);
     		navx.reset();
-    	} catch (RuntimeException ex) {
-            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-        }
     }
     public void pidWrite(double output) {
     	rotateToAngleRate = output;
     	arcadeDrive(0, rotateToAngleRate);
+    	SmartDashboard.putNumber("NavX", navx.getAngle());
     }
     public double getAngle() {
     	return navx.getAngle();
