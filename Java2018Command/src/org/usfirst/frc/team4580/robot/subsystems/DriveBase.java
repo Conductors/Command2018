@@ -91,6 +91,9 @@ public class DriveBase extends Subsystem implements PIDOutput {
     		turnController.disable();
     	}
     }
+    public boolean isDone() {
+    	return turnController.onTarget();
+    }
     public void resetNavx() {
     		navx.reset();
     }

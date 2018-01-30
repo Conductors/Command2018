@@ -120,7 +120,7 @@ public class Robot extends TimedRobot {
 		} else {
 			m_autonomousCommand = rightSwitch;
 		} */
-		m_autonomousCommand = leftSwitch;
+		m_autonomousCommand = baseline;
 	
 		m_autonomousCommand.start();
 	}

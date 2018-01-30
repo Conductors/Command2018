@@ -74,4 +74,10 @@ public class Baseline extends Command implements PIDOutput{
     // subsystems is scheduled to run
     protected void interrupted() {
     }
+
+	@Override
+	public void pidWrite(double output) {
+		// TODO Auto-generated method stub
+		Robot.driveBase.arcadeDrive(output, 0);
+	}
 }
