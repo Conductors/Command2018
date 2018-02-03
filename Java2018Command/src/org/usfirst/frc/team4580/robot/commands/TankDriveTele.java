@@ -2,13 +2,7 @@ package org.usfirst.frc.team4580.robot.commands;
 
 import org.usfirst.frc.team4580.robot.OI;
 import org.usfirst.frc.team4580.robot.Robot;
-import org.usfirst.frc.team4580.robot.subsystems.DriveBase;
-
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class TankDriveTele extends Command {
     DoubleSolenoid shift;
+    DoubleSolenoid test1;
     //NetworkTable vision;	
 	public TankDriveTele() {
         // Use requires() here to declare subsystem dependencies
@@ -28,16 +23,19 @@ public class TankDriveTele extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	shift = new DoubleSolenoid(0,1);
+    	test1 = new DoubleSolenoid(2,3);
     	Robot.driveBase.PIDEnable(false);
+    	
     	Scheduler.getInstance().run();    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.driveBase.tankDrive(OI.getLeftSpeed() *-1, OI.getRightSpeed()*-1);
-    	SmartDashboard.putNumber("Left Joystick", OI.getLeftSpeed());
     	if (OI.getButton(5)) shift.set(DoubleSolenoid.Value.kForward);
     	if (OI.getButton(6)) shift.set(DoubleSolenoid.Value.kReverse);
+    	if (OI.getButton(3)) test1.set(DoubleSolenoid.Value.kForward);
+    	if (OI.getButton(4)) test1.set(DoubleSolenoid.Value.kReverse);
     	//System.out.println(Robot.driveBase.getAngle());
     	//double[] defaultValue = new double[0];
     	//System.out.println(vision.getEntry("centerX").getDoubleArray(defaultValue)[0]);

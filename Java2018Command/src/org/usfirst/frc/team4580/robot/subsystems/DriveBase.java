@@ -5,19 +5,13 @@ import org.usfirst.frc.team4580.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
-//import edu.wpi.first.wpilibj.PIDController;
-//import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -65,7 +59,7 @@ public class DriveBase extends Subsystem implements PIDOutput {
     	turnController.setOutputRange(-1.0, 1.0);
     	turnController.setPercentTolerance(kTolerancePercent);
     	turnController.setContinuous(true);
-
+    	myRobot.setSafetyEnabled(false);
     	
     	
 	}

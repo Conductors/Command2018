@@ -62,7 +62,6 @@ public class Robot extends TimedRobot {
 		m_chooser.addObject("Baseline", baseline);
 		SmartDashboard.putData("Auto mode", m_chooser);
 		CameraServer.getInstance().startAutomaticCapture();
-		
 		/*try {
 			CameraServer.getInstance().startAutomaticCapture();
 		} catch (Exception e) {
@@ -139,6 +138,7 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+		baseline.PIDEnable(false);
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}

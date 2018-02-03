@@ -33,5 +33,8 @@ public class RobotMap {
 	public static int joyY = 0;
 	public static double rotateVelocity = .5;
 	public static double botLength = 36;
-	public static int baseLength = 120;
+	public static double baseLength = 120;
+	public static double wheelSize = 6.0;
+	public static double encoderPPR = 1440;
+	public static double encoderDPP = wheelSize*Math.PI/encoderPPR;
 }
