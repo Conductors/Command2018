@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team4580.robot.commands.Baseline;
+//import org.usfirst.frc.team4580.robot.commands.Baseline;
 import org.usfirst.frc.team4580.robot.commands.LeftSwitch;
 import org.usfirst.frc.team4580.robot.commands.RightSwitch;
 import org.usfirst.frc.team4580.robot.commands.TeleCommands;
@@ -40,7 +40,6 @@ public class Robot extends TimedRobot {
 	public static TeleCommands teleCommands;
 	public static LeftSwitch leftSwitch;
 	public static RightSwitch rightSwitch;
-	public static Baseline baseline;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -51,7 +50,7 @@ public class Robot extends TimedRobot {
 		m_oi = new OI();
 
 		driveBase = new DriveBase();
-		baseline = new Baseline();
+		//baseline = new Baseline();
 
 		teleCommands = new TeleCommands();
 		leftSwitch =  new LeftSwitch();
@@ -59,7 +58,6 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Default Auto", new LeftSwitch());
 		m_chooser.addObject("Left Switch", leftSwitch);
 		m_chooser.addObject("Right Switch", rightSwitch);
-		m_chooser.addObject("Baseline", baseline);
 		SmartDashboard.putData("Auto mode", m_chooser);
 		CameraServer.getInstance().startAutomaticCapture();
 		/*try {
@@ -119,7 +117,7 @@ public class Robot extends TimedRobot {
 		} else {
 			m_autonomousCommand = rightSwitch;
 		} */
-		m_autonomousCommand = baseline;
+		m_autonomousCommand = leftSwitch;
 	
 		m_autonomousCommand.start();
 	}
@@ -138,7 +136,7 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		baseline.PIDEnable(false);
+		//baseline.PIDEnable(false);
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}

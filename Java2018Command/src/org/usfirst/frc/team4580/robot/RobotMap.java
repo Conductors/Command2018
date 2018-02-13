@@ -28,6 +28,8 @@ public class RobotMap {
 	public static int leftBackTal = 1;
 	public static int rightFrontTal = 2;
 	public static int rightBackTal = 5;
+	public static int intake = 8;
+	public static int lift = 9;
 	public static int stick1 = 0;
 	public static int stick2 = 1;
 	public static int joyY = 0;

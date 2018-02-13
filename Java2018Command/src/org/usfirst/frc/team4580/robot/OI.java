@@ -52,4 +52,8 @@ public class OI {
 	public static boolean getButton(int n) {
 		return stickOne.getRawButton(n);
 	}
+	public static double getAxis(int n) {
+		return stickOne.getRawAxis(n);
+	}
+	
 }

@@ -50,6 +50,7 @@ public class DriveBase extends Subsystem implements PIDOutput {
 		leftSide = new SpeedControllerGroup(leftFront, leftBack);
 		rightSide = new SpeedControllerGroup(rightFront, rightBack);
 		myRobot = new DifferentialDrive(leftSide, rightSide );
+	
 		myRobot.setSafetyEnabled(false);
 		myRobot.setExpiration(.1);
     	navx = new AHRS(I2C.Port.kMXP);
