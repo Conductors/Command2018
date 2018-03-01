@@ -41,16 +41,21 @@ public class OI {
 	// Start the command when the button is released and let it run the command
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
-	public static Joystick stickOne = new Joystick(RobotMap.stick1);
-	public static Joystick stickTwo = new Joystick(RobotMap.stick2);
+	public static Joystick stickOne = new Joystick(RobotMap.leftStick);
+	public static Joystick stickTwo = new Joystick(RobotMap.rightStick);
 	public static double getLeftSpeed() {
 		return stickOne.getRawAxis(1);
 	}
 	public static double getRightSpeed() {
-		return stickOne.getRawAxis(5);
+		return stickTwo.getRawAxis(1);
 	}
-	public static boolean getButton(int n) {
-		return stickOne.getRawButton(n);
+	public static boolean getButton(int stick, int b) {
+		if (stick == 1) {
+			return stickOne.getRawButton(b);
+		} else if (stick == 2) {
+			return stickTwo.getRawButton(b);
+		}
+		return false;
 	}
 	public static double getAxis(int n) {
 		return stickOne.getRawAxis(n);

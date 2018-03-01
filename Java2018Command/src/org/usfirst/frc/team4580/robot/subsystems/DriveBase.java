@@ -4,12 +4,17 @@ import org.usfirst.frc.team4580.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS.SerialDataType;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,15 +22,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class DriveBase extends Subsystem implements PIDOutput {
-	static final double kP = 0.06;
-    static final double kI = 0.00;
-    static final double kD = 0.00;
-    static final double kF = 0.00;
-    static final double kTolerancePercent = .5;
+public class DriveBase extends Subsystem {
 
-    double rotateToAngleRate;
-    PIDController turnController;
+	static final double encoderDPP = RobotMap.encoderDPP;
+AHRS navx;
     PIDController distController;
     WPI_TalonSRX leftFront;
 	WPI_TalonSRX leftBack;
@@ -36,7 +36,7 @@ public class DriveBase extends Subsystem implements PIDOutput {
 	DifferentialDrive myRobot;
 	Encoder right;
 	Encoder left;
-	AHRS navx;
+	ADXRS450_Gyro gyro;
 	public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
@@ -47,22 +47,19 @@ public class DriveBase extends Subsystem implements PIDOutput {
 		leftBack = new WPI_TalonSRX(RobotMap.leftBackTal);
 		rightFront = new WPI_TalonSRX(RobotMap.rightFrontTal);
 		rightBack = new WPI_TalonSRX(RobotMap.rightBackTal);
-		leftSide = new SpeedControllerGroup(leftFront, leftBack);
-		rightSide = new SpeedControllerGroup(rightFront, rightBack);
+		leftSide = new SpeedControllerGroup(leftFront,leftBack);
+		rightSide = new SpeedControllerGroup(rightFront,rightBack);
 		myRobot = new DifferentialDrive(leftSide, rightSide );
-	
+    	right = new Encoder(2,3,false,EncodingType.k4X);
+    	left = new Encoder(0, 1,true,EncodingType.k4X);
+    	left.reset();
+    	right.reset();
 		myRobot.setSafetyEnabled(false);
-		myRobot.setExpiration(.1);
-    	navx = new AHRS(I2C.Port.kMXP);
-		turnController = new PIDController(kP, kI, kD, kF, navx, this);
-    	navx.reset();
-		turnController.setInputRange(-500.0f, 500.0f);
-    	turnController.setOutputRange(-1.0, 1.0);
-    	turnController.setPercentTolerance(kTolerancePercent);
-    	turnController.setContinuous(true);
-    	myRobot.setSafetyEnabled(false);
-    	
-    	
+		myRobot.setExpiration(.5);
+		navx = new AHRS(SPI.Port.kMXP,(byte)100);
+    	right.setDistancePerPulse(encoderDPP);
+    	left.setDistancePerPulse(encoderDPP);
+    	gyro = new ADXRS450_Gyro();
 	}
 
 	public void tankDrive(double firstVal,double secondVal) {
@@ -71,33 +68,29 @@ public class DriveBase extends Subsystem implements PIDOutput {
 	public void arcadeDrive(double firstVal, double secondVal) {
 		myRobot.arcadeDrive(firstVal, secondVal);
     }
-    public void PIDRotate(double angle) {
-    	navx.reset();
-    	turnController.setSetpoint(angle);
-    	turnController.enable();
-    	SmartDashboard.putNumber("NavX", navx.getAngle());
-    	SmartDashboard.putData("Left Encoder PID",turnController);
+
+    public void resetEnc(char side) {
+    	if (side == 'r') {
+    		right.reset();
+    	}else left.reset();
     	
     }
-    public void PIDEnable(boolean enable) {
-    	if (enable) {
-    		turnController.enable();
-    	} else {
-    		turnController.disable();
+    public Encoder getLeftRaw() {
+    	return left;
+    }
+    public Encoder getRightRaw() {
+    	return right;
+    }
+    public double encoderPos(char side) {
+    	if (side == 'r') {
+    		return right.getDistance();
     	}
+    	return left.getDistance();
     }
-    public boolean isDone() {
-    	return turnController.onTarget();
+    public AHRS getNavx() {
+    	return navx;
     }
-    public void resetNavx() {
-    		navx.reset();
-    }
-    public void pidWrite(double output) {
-    	rotateToAngleRate = output;
-    	arcadeDrive(0, rotateToAngleRate);
-    	SmartDashboard.putNumber("NavX", navx.getAngle());
-    }
-    public double getAngle() {
-    	return navx.getAngle();
+    public ADXRS450_Gyro getGyro() {
+    	return gyro;
     }
 }

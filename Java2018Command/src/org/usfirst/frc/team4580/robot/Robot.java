@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team4580.robot.commands.GoDistance;
 //import org.usfirst.frc.team4580.robot.commands.Baseline;
 import org.usfirst.frc.team4580.robot.commands.LeftSwitch;
 import org.usfirst.frc.team4580.robot.commands.RightSwitch;
@@ -40,6 +41,7 @@ public class Robot extends TimedRobot {
 	public static TeleCommands teleCommands;
 	public static LeftSwitch leftSwitch;
 	public static RightSwitch rightSwitch;
+	//public static GoDistance gogo;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -50,23 +52,21 @@ public class Robot extends TimedRobot {
 		m_oi = new OI();
 
 		driveBase = new DriveBase();
-		//baseline = new Baseline();
 
 		teleCommands = new TeleCommands();
 		leftSwitch =  new LeftSwitch();
 		rightSwitch = new RightSwitch();
-		m_chooser.addDefault("Default Auto", new LeftSwitch());
+		m_chooser.addDefault("Default Auto",  leftSwitch);
 		m_chooser.addObject("Left Switch", leftSwitch);
 		m_chooser.addObject("Right Switch", rightSwitch);
 		SmartDashboard.putData("Auto mode", m_chooser);
-		CameraServer.getInstance().startAutomaticCapture();
+		//CameraServer.getInstance().startAutomaticCapture();
 		/*try {
 			CameraServer.getInstance().startAutomaticCapture();
 		} catch (Exception e) {
 			DriverStation.reportError("CAMERA SERVER ERROR: " + e.getMessage(), true);
 		} */
 		Compressor compressor = new Compressor(0);
-		compressor.setClosedLoopControl(true);
 	}
 
 	/**
@@ -138,8 +138,9 @@ public class Robot extends TimedRobot {
 		// this line or comment it out.
 		//baseline.PIDEnable(false);
 		if (m_autonomousCommand != null) {
-			m_autonomousCommand.cancel();
+			//m_autonomousCommand.cancel();
 		}
+		
 		teleCommands.start();
 		
 	}
