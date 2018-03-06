@@ -21,7 +21,7 @@ public class Rotate extends Command implements PIDOutput {
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 0.00;
-    static final double kAbsoluteTol = .08;
+    static final double kPercentTol = .08;
     PIDController turnController;
     AHRS navx;
     public Rotate(double goAngle) {
@@ -34,7 +34,7 @@ public class Rotate extends Command implements PIDOutput {
     	turnController = new PIDController(kP, kI, kD, kF, navx, this);
 		turnController.setInputRange(-500.0f, 500.0f);
     	turnController.setOutputRange(-.8, .8);
-    	turnController.setPercentTolerance(kAbsoluteTol);
+    	turnController.setPercentTolerance(kPercentTol);
     	turnController.setContinuous(true);
     	
     	
@@ -45,12 +45,13 @@ public class Rotate extends Command implements PIDOutput {
     protected void initialize() {
     	navx.reset();
     	turnController.disable();
+    	turnController.setSetpoint(angle);
+    	turnController.enable();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	turnController.setSetpoint(angle);
-    	turnController.enable();
+
     }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {

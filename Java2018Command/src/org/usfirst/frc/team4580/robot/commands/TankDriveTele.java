@@ -38,14 +38,14 @@ public class TankDriveTele extends Command {
         requires(Robot.driveBase);
         //vision =  NetworkTableInstance.create().getTable("GRIP/vision");
         //intake = new WPI_TalonSRX(RobotMap.rightBackTal);
-        shift = new DoubleSolenoid(0,1);
+        shift = new DoubleSolenoid(2,3);
         navx = Robot.driveBase.getNavx();
         elevateOne = new WPI_TalonSRX(RobotMap.elevator1);
         elevateTwo = new WPI_TalonSRX(RobotMap.elevator2);
         left = Robot.driveBase.getLeftRaw();
         right = Robot.driveBase.getRightRaw();
-        topSwitch = new DigitalInput(4);
-        bottomSwitch = new DigitalInput(5);
+        //topSwitch = new DigitalInput(4);
+        //bottomSwitch = new DigitalInput(5);
         fliparoo = false;
         fliplock = true;
     }

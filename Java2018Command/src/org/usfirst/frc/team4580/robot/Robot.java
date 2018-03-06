@@ -20,11 +20,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team4580.robot.commands.GoDistance;
+import org.usfirst.frc.team4580.robot.commands.LeftLeftScale;
 //import org.usfirst.frc.team4580.robot.commands.Baseline;
 import org.usfirst.frc.team4580.robot.commands.LeftSwitch;
 import org.usfirst.frc.team4580.robot.commands.RightSwitch;
 import org.usfirst.frc.team4580.robot.commands.TeleCommands;
 import org.usfirst.frc.team4580.robot.subsystems.DriveBase;
+import org.usfirst.frc.team4580.robot.subsystems.Lift;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,8 +41,9 @@ public class Robot extends TimedRobot {
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 	public static DriveBase driveBase;
 	public static TeleCommands teleCommands;
-	public static LeftSwitch leftSwitch;
+	public static LeftLeftScale leftSwitch;
 	public static RightSwitch rightSwitch;
+	public static Lift lift;
 	//public static GoDistance gogo;
 	
 	/**
@@ -52,9 +55,9 @@ public class Robot extends TimedRobot {
 		m_oi = new OI();
 
 		driveBase = new DriveBase();
-
+		lift = new Lift();
 		teleCommands = new TeleCommands();
-		leftSwitch =  new LeftSwitch();
+		leftSwitch =  new LeftLeftScale();
 		rightSwitch = new RightSwitch();
 		m_chooser.addDefault("Default Auto",  leftSwitch);
 		m_chooser.addObject("Left Switch", leftSwitch);
