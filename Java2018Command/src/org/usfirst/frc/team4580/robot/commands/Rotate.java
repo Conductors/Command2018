@@ -36,9 +36,6 @@ public class Rotate extends Command implements PIDOutput {
     	turnController.setOutputRange(-.8, .8);
     	turnController.setPercentTolerance(kPercentTol);
     	turnController.setContinuous(true);
-    	
-    	
-
     }
 
     // Called just before this Command runs the first time
@@ -60,8 +57,8 @@ public class Rotate extends Command implements PIDOutput {
     // Called once after isFinished returns true
     protected void end() {
     	turnController.disable();
-    	navx.reset();
     	System.out.println(navx.getAngle());
+    	navx.reset();
     	Robot.driveBase.arcadeDrive(0, 0);
     	System.out.println("Rotation done");
     }

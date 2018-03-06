@@ -3,6 +3,8 @@ package org.usfirst.frc.team4580.robot.commands;
 import org.usfirst.frc.team4580.robot.Robot;
 import org.usfirst.frc.team4580.robot.RobotMap;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -15,13 +17,20 @@ public class GoDistance extends Command implements PIDOutput{
 
 	double distance;
 	PIDController distController;
+	PIDController turnController;
 	static final double lP = 1.4;
     static final double lI = 0.00;
     static final double lD = 0.00;
     static final double lF = 0.00;
     static final double lAbsolute = .1;
+    static final double kP = 0.022;
+    static final double kI = 0.00;
+    static final double kD = 0.00;
+    static final double kF = 0.00;
+    static final double kPercentTol = .08;
     Encoder left;
     Encoder right;
+    PIDDistTurn turnMod;
     public GoDistance(double dist) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -34,20 +43,30 @@ public class GoDistance extends Command implements PIDOutput{
     	left = Robot.driveBase.getLeftRaw();
     	right = Robot.driveBase.getRightRaw();
     	distController = new PIDController(lP,lI,lD,lF,right,this);
-		distController.setInputRange(-500.0f, 500.0f);
+    	turnMod = new PIDDistTurn();
+    	AHRS navx = Robot.driveBase.getNavx();
+    	turnController = new PIDController(kP,kI,kD,kF,navx,turnMod);
+		distController.setInputRange(-1000.0f, 1000.0f);
 		distController.setOutputRange(-.8, .8);
     	distController.setAbsoluteTolerance(lAbsolute);
     	distController.setContinuous(true);
-    	
+		turnController.setInputRange(-600.0f, 600.0f);
+    	turnController.setOutputRange(-.8, .8);
+    	turnController.setPercentTolerance(kPercentTol);
+    	turnController.setContinuous(true);
     	left.reset();
     	right.reset();
+    	navx.reset();
     	distController.enable();
-    	SmartDashboard.putData(distController);
-    	
+    	turnController.enable();
+    	//SmartDashboard.putData(distController);
+    	distController.setSetpoint(distance);
+    	turnController.setSetpoint(0.0);
     }
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	distController.setSetpoint(distance);
+    	
+    	
     	SmartDashboard.putNumber("Right Encoder Dist", right.getDistance());
     } 
 
@@ -67,14 +86,18 @@ public class GoDistance extends Command implements PIDOutput{
     // Called once after isFinished returns true
     protected void end() {
     	distController.disable();
+    	turnController.disable();
     	Robot.driveBase.arcadeDrive(0, 0);
     	System.out.println("Driving done");
     }
 	public boolean isDone() {
-		return distController.onTarget();
+		return distController.onTarget() && turnController.onTarget();
 	}
     public void PIDWrite(double output) {
     	Robot.driveBase.arcadeDrive(output, 0);
+    }
+    public double getTurnMod() {
+    	return turnMod.getTurnMod();
     }
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
@@ -85,6 +108,6 @@ public class GoDistance extends Command implements PIDOutput{
 	@Override
 	public void pidWrite(double output) {
 		// TODO Auto-generated method stub
-		Robot.driveBase.arcadeDrive(output, 0);
+		Robot.driveBase.arcadeDrive(output, getTurnMod());
 	} 
 }

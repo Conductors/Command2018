@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4580.robot.commands;
 
+import org.usfirst.frc.team4580.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
@@ -24,10 +26,14 @@ public class RightLeftScale extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-    	addSequential(new GoDistance(168 + 42));
+    	/*addSequential(new GoDistance(168 + 42));
     	addSequential(new Rotate(-90.0));
     	addSequential(new GoDistance(60));	
     	addSequential(new Rotate(-90.0));
-    	addSequential(new GoDistance((168+42)));
+    	addSequential(new GoDistance((168+42))); */
+    	addSequential(new GoDistance(196 + RobotMap.botLength));
+    	addSequential(new Rotate(-90.0));
+    	addSequential(new GoDistance(150));
+    	addSequential(new Rotate(-90.0));
     }
 }

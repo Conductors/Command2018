@@ -36,7 +36,6 @@ public class TankDriveTele extends Command {
 	public TankDriveTele() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.driveBase);
-        //vision =  NetworkTableInstance.create().getTable("GRIP/vision");
         //intake = new WPI_TalonSRX(RobotMap.rightBackTal);
         shift = new DoubleSolenoid(2,3);
         navx = Robot.driveBase.getNavx();
