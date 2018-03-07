@@ -33,7 +33,7 @@ public class Rotate extends Command implements PIDOutput {
     	navx.reset();
     	turnController = new PIDController(kP, kI, kD, kF, navx, this);
 		turnController.setInputRange(-500.0f, 500.0f);
-    	turnController.setOutputRange(-.8, .8);
+    	turnController.setOutputRange(-.7, .7);
     	turnController.setPercentTolerance(kPercentTol);
     	turnController.setContinuous(true);
     }

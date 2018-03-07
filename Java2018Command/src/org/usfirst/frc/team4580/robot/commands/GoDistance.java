@@ -23,17 +23,17 @@ public class GoDistance extends Command implements PIDOutput{
     static final double lD = 0.00;
     static final double lF = 0.00;
     static final double lAbsolute = .1;
-    static final double kP = 0.022;
+    static final double kP = 0.12;
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 0.00;
-    static final double kPercentTol = .08;
+    static final double kPercentTol = .05;
     Encoder left;
     Encoder right;
     PIDDistTurn turnMod;
     public GoDistance(double dist) {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+        // eg. requires(chassis);u
     	requires(Robot.driveBase);
     	distance = (dist - RobotMap.botLength)/3.0;
     }
@@ -51,7 +51,7 @@ public class GoDistance extends Command implements PIDOutput{
     	distController.setAbsoluteTolerance(lAbsolute);
     	distController.setContinuous(true);
 		turnController.setInputRange(-600.0f, 600.0f);
-    	turnController.setOutputRange(-.8, .8);
+    	turnController.setOutputRange(-1.0, 1.0);
     	turnController.setPercentTolerance(kPercentTol);
     	turnController.setContinuous(true);
     	left.reset();
@@ -97,6 +97,7 @@ public class GoDistance extends Command implements PIDOutput{
     	Robot.driveBase.arcadeDrive(output, 0);
     }
     public double getTurnMod() {
+    	SmartDashboard.putNumber("Turn", turnMod.getTurnMod());
     	return turnMod.getTurnMod();
     }
     // Called when another command which requires one or more of the same

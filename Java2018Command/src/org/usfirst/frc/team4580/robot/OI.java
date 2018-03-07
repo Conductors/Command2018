@@ -47,7 +47,7 @@ public class OI {
 		return stickOne.getRawAxis(1);
 	}
 	public static double getRightSpeed() {
-		return stickTwo.getRawAxis(1);
+		return stickOne.getRawAxis(5);
 	}
 	public static boolean getButton(int stick, int b) {
 		if (stick == 1) {

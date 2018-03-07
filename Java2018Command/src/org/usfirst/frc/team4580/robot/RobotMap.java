@@ -43,7 +43,7 @@ public class RobotMap {
 	public static int climb2 = 14;
 	public static int stick1 = 0;
 	public static int stick2 = 1;
-	public static int leftStick = 1;
+	public static int leftStick = 0;
 	public static int rightStick = 2;
 	public static double rotateVelocity = .5;
 	public static double botLength = 32;

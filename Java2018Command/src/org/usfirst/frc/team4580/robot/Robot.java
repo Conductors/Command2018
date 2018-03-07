@@ -23,15 +23,12 @@ import org.usfirst.frc.team4580.robot.commands.GoDistance;
 import org.usfirst.frc.team4580.robot.commands.LeftLeftScale;
 import org.usfirst.frc.team4580.robot.commands.LeftLine;
 import org.usfirst.frc.team4580.robot.commands.LeftRightScale;
-//import org.usfirst.frc.team4580.robot.commands.Baseline;
-import org.usfirst.frc.team4580.robot.commands.LeftSwitch;
 import org.usfirst.frc.team4580.robot.commands.MiddleLeftScale;
 import org.usfirst.frc.team4580.robot.commands.MiddleLine;
 import org.usfirst.frc.team4580.robot.commands.MiddleRightScale;
 import org.usfirst.frc.team4580.robot.commands.RightLeftScale;
 import org.usfirst.frc.team4580.robot.commands.RightLine;
 import org.usfirst.frc.team4580.robot.commands.RightRightScale;
-import org.usfirst.frc.team4580.robot.commands.RightSwitch;
 import org.usfirst.frc.team4580.robot.commands.TeleCommands;
 import org.usfirst.frc.team4580.robot.subsystems.DriveBase;
 import org.usfirst.frc.team4580.robot.subsystems.Lift;
@@ -139,7 +136,7 @@ public class Robot extends TimedRobot {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		if (m_chooser.getSelected().equals("left")) {
 			if (typeChoose.getSelected().equals("scale")) {
-				if (gameData.charAt(0) == 'L') {
+				if (gameData.charAt(1) == 'L') {
 					m_autonomousCommand = leftLeftScale;
 				} else {
 					m_autonomousCommand = leftRightScale;
@@ -149,7 +146,7 @@ public class Robot extends TimedRobot {
 			}
 		} else if (m_chooser.getSelected().equals("middle")) {
 			if (typeChoose.getSelected().equals("scale")) {
-				if (gameData.charAt(0) == 'L') {
+				if (gameData.charAt(1) == 'L') {
 					m_autonomousCommand = middleLeftScale;
 				} else {
 					m_autonomousCommand = middleRightScale;
@@ -159,7 +156,7 @@ public class Robot extends TimedRobot {
 			}
 		} else if (m_chooser.getSelected().equals("right")) {
 			if (typeChoose.getSelected().equals("scale")) {
-				if (gameData.charAt(0) == 'L') {
+				if (gameData.charAt(1) == 'L') {
 					m_autonomousCommand = rightLeftScale;
 				} else {
 					m_autonomousCommand = rightRightScale;
