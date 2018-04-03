@@ -18,12 +18,12 @@ public class GoDistance extends Command implements PIDOutput{
 	double distance;
 	PIDController distController;
 	PIDController turnController;
-	static final double lP = 1.4;
+	static final double lP = 1.0;
     static final double lI = 0.00;
     static final double lD = 0.00;
     static final double lF = 0.00;
     static final double lAbsolute = .1;
-    static final double kP = 0.12;
+    static final double kP = 0.06;
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 0.00;
@@ -65,28 +65,30 @@ public class GoDistance extends Command implements PIDOutput{
     }
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
-    	
     	SmartDashboard.putNumber("Right Encoder Dist", right.getDistance());
     } 
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (distController.onTarget()) {
+    	if (isDone()) {
     		return true;
     	} return false;
     }
     public void PIDEnable(boolean enable) {
     	if (enable) {
     		distController.enable();
+    		turnController.enable();
     	} else {
     		distController.disable();
+    		turnController.disable();
     	}
     }
     // Called once after isFinished returns true
     protected void end() {
     	distController.disable();
     	turnController.disable();
+    	turnController.free();
+		distController.free();
     	Robot.driveBase.arcadeDrive(0, 0);
     	System.out.println("Driving done");
     }

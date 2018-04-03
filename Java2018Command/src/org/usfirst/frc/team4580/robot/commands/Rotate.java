@@ -33,7 +33,7 @@ public class Rotate extends Command implements PIDOutput {
     	navx.reset();
     	turnController = new PIDController(kP, kI, kD, kF, navx, this);
 		turnController.setInputRange(-500.0f, 500.0f);
-    	turnController.setOutputRange(-.7, .7);
+    	turnController.setOutputRange(-.8, .8);
     	turnController.setPercentTolerance(kPercentTol);
     	turnController.setContinuous(true);
     }
@@ -61,6 +61,8 @@ public class Rotate extends Command implements PIDOutput {
     	navx.reset();
     	Robot.driveBase.arcadeDrive(0, 0);
     	System.out.println("Rotation done");
+    	turnController.free();
+    	
     }
 
     // Called when another command which requires one or more of the same

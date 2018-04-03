@@ -24,7 +24,7 @@ public class LeftLeftScale extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-    	addSequential(new GoDistance(356.0 + 72));
+    	addSequential(new GoDistance(356.0 + 72 - 10.0));
     	addSequential(new Rotate(90.0));
     	//addSequential(new RaiseLift(true));
     }

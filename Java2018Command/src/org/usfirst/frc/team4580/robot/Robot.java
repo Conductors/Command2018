@@ -26,9 +26,9 @@ import org.usfirst.frc.team4580.robot.commands.LeftRightScale;
 import org.usfirst.frc.team4580.robot.commands.MiddleLeftScale;
 import org.usfirst.frc.team4580.robot.commands.MiddleLine;
 import org.usfirst.frc.team4580.robot.commands.MiddleRightScale;
+import org.usfirst.frc.team4580.robot.commands.NoAuto;
 import org.usfirst.frc.team4580.robot.commands.RightLeftScale;
 import org.usfirst.frc.team4580.robot.commands.RightLine;
-import org.usfirst.frc.team4580.robot.commands.RightRightScale;
 import org.usfirst.frc.team4580.robot.commands.TeleCommands;
 import org.usfirst.frc.team4580.robot.subsystems.DriveBase;
 import org.usfirst.frc.team4580.robot.subsystems.Lift;
@@ -51,12 +51,13 @@ public class Robot extends TimedRobot {
 	public static LeftRightScale leftRightScale;
 	public static LeftLine leftLine;
 	public static RightLeftScale rightLeftScale;
-	public static RightRightScale rightRightScale;
+	//public static RightRightScale rightRightScale;
 	public static RightLine rightLine;
 	public static MiddleLeftScale middleLeftScale;
 	public static MiddleRightScale middleRightScale;
 	public static MiddleLine middleLine;
 	public static Lift lift;
+	public static NoAuto noAuto;
 	//public static GoDistance gogo;
 	
 	/**
@@ -73,10 +74,11 @@ public class Robot extends TimedRobot {
 		leftRightScale = new LeftRightScale();
 		leftLine = new LeftLine();
 		rightLeftScale = new RightLeftScale();
-		rightRightScale = new RightRightScale();
+		//rightRightScale = new RightRightScale();
 		rightLine = new RightLine();
 		middleLeftScale = new MiddleLeftScale();
 		middleRightScale = new MiddleRightScale();
+		noAuto = new NoAuto();
 		middleLine = new MiddleLine();
 		m_chooser.addDefault("Left",  "left");
 		m_chooser.addObject("Middle", "middle");
@@ -85,12 +87,13 @@ public class Robot extends TimedRobot {
 		typeChoose.addObject("Baseline","line");
 		SmartDashboard.putData("Side", m_chooser);
 		SmartDashboard.putData("Type", typeChoose);
-		try {
+		/*try {
 			CameraServer.getInstance().startAutomaticCapture();
 		} catch (Exception e) {
 			DriverStation.reportError("CAMERA SERVER ERROR: " + e.getMessage(), true);
-		}
+		} */
 		Compressor compressor = new Compressor(0);
+		compressor.setClosedLoopControl(true);
 	}
 
 	/**
@@ -134,7 +137,7 @@ public class Robot extends TimedRobot {
 
 		String gameData;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		if (m_chooser.getSelected().equals("left")) {
+		/*if (m_chooser.getSelected().equals("left")) {
 			if (typeChoose.getSelected().equals("scale")) {
 				if (gameData.charAt(1) == 'L') {
 					m_autonomousCommand = leftLeftScale;
@@ -158,16 +161,19 @@ public class Robot extends TimedRobot {
 			if (typeChoose.getSelected().equals("scale")) {
 				if (gameData.charAt(1) == 'L') {
 					m_autonomousCommand = rightLeftScale;
+					System.out.println("Right left");
 				} else {
 					m_autonomousCommand = rightRightScale;
 				} 
 			} else if (typeChoose.getSelected().equals("line")) {
 				m_autonomousCommand = rightLine;
 			}
-		}
+		} */
+		m_autonomousCommand = rightLine;
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.start();
-		}
+		} 
+		
 	}
 
 	/**

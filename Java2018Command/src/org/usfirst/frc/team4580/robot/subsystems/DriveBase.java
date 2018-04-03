@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -33,9 +35,11 @@ AHRS navx;
 	WPI_TalonSRX rightBack;
 	SpeedControllerGroup leftSide;
 	SpeedControllerGroup rightSide;
+	//Spark upDown;
 	DifferentialDrive myRobot;
 	Encoder right;
 	Encoder left;
+	DoubleSolenoid shift;
 	ADXRS450_Gyro gyro;
 	public void initDefaultCommand() {
         // Set the default command for a subsystem here.
@@ -50,8 +54,9 @@ AHRS navx;
 		leftSide = new SpeedControllerGroup(leftFront,leftBack);
 		rightSide = new SpeedControllerGroup(rightFront,rightBack);
 		myRobot = new DifferentialDrive(leftSide, rightSide );
-    	right = new Encoder(2,3,false,EncodingType.k4X);
-    	left = new Encoder(0, 1,true,EncodingType.k4X);
+		//upDown = new Spark(RobotMap.upDown);
+    	right = new Encoder(2,3,true,EncodingType.k4X);
+    	left = new Encoder(0, 1,false,EncodingType.k4X);
     	left.reset();
     	right.reset();
 		myRobot.setSafetyEnabled(false);
@@ -59,7 +64,8 @@ AHRS navx;
 		navx = new AHRS(SPI.Port.kMXP,(byte)100);
     	right.setDistancePerPulse(encoderDPP);
     	left.setDistancePerPulse(encoderDPP);
-    	gyro = new ADXRS450_Gyro();
+    	//gyro = new ADXRS450_Gyro();
+    	shift = new DoubleSolenoid(2,4);
 	}
 
 	public void tankDrive(double firstVal,double secondVal) {
@@ -68,7 +74,12 @@ AHRS navx;
 	public void arcadeDrive(double firstVal, double secondVal) {
 		myRobot.arcadeDrive(firstVal, secondVal);
     }
-
+	/*public void setUpDown(double val) {
+		upDown.set(val);
+	} */
+	public DoubleSolenoid getShift() {
+		return shift;
+	}
     public void resetEnc(char side) {
     	if (side == 'r') {
     		right.reset();
@@ -90,7 +101,7 @@ AHRS navx;
     public AHRS getNavx() {
     	return navx;
     }
-    public ADXRS450_Gyro getGyro() {
+    /*public ADXRS450_Gyro getGyro() {
     	return gyro;
-    }
+    } */
 }

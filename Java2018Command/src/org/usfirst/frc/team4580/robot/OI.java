@@ -43,17 +43,23 @@ public class OI {
 	// button.whenReleased(new ExampleCommand());
 	public static Joystick stickOne = new Joystick(RobotMap.leftStick);
 	public static Joystick stickTwo = new Joystick(RobotMap.rightStick);
+	public static Joystick logitech = new Joystick(RobotMap.logitech);
 	public static double getLeftSpeed() {
 		return stickOne.getRawAxis(1);
 	}
 	public static double getRightSpeed() {
-		return stickOne.getRawAxis(5);
+		return stickTwo.getRawAxis(1);
+	}
+	public static double getTempAx() {
+		return logitech.getRawAxis(5);
 	}
 	public static boolean getButton(int stick, int b) {
-		if (stick == 1) {
+		if (stick == 0) {
 			return stickOne.getRawButton(b);
-		} else if (stick == 2) {
+		} else if (stick == 1) {
 			return stickTwo.getRawButton(b);
+		} else if (stick == 2) {
+			return logitech.getRawButton(b);
 		}
 		return false;
 	}

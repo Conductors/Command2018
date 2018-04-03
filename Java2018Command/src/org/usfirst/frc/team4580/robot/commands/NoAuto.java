@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class RightRightScale extends CommandGroup {
+public class NoAuto extends CommandGroup {
 
-    public RightRightScale() {
+    public NoAuto() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -24,8 +24,5 @@ public class RightRightScale extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-    	addSequential(new GoDistance(356.0 + 72.0));
-    	addSequential(new Rotate(-90.0));
-    	//addSequential(new RaiseLift(true));
     }
 }
